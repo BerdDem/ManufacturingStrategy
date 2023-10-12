@@ -1,11 +1,12 @@
-﻿using System;
-using Source.View.Properties;
+﻿using Source.View.Properties;
 using UnityEngine;
 
 namespace Source.View.Windows
 {
     public class UIMainMenu : MonoBehaviour
     {
+        [SerializeField] private LocationBuilder _locationBuilder;
+        
         private readonly IntProperty _indexSelectedButton = new();
 
         private void Start()
@@ -20,7 +21,10 @@ namespace Source.View.Windows
 
         public void StartGame()
         {
-            
+            _locationBuilder.AddResourceBuildingToPool(_indexSelectedButton.value);
+            _locationBuilder.DropBuildings();
+
+            gameObject.SetActive(false);
         }
     }
 }
