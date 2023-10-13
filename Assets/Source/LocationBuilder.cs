@@ -5,8 +5,8 @@ namespace Source
 {
     public class LocationBuilder : MonoBehaviour
     {
-        private readonly Vector2 XRange = new(-6, 6);
-        private readonly Vector2 YRange = new(3, -3);
+        private readonly Vector2 XRange = new(-6, 6.1f);
+        private readonly Vector2 YRange = new(0, -3.1f);
         
         [SerializeField] private GameObject _resourceBuilding;
         [SerializeField] private GameObject _processingBuilding;
@@ -36,6 +36,7 @@ namespace Source
             {
                 if (buildingPosition.x >= XRange.y)
                 {
+                    buildingPosition.x = XRange.x;
                     buildingPosition += new Vector2(0, -3);
                 }
                 
