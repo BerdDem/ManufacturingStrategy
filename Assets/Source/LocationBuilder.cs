@@ -1,5 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Source.Buildings;
+using Source.View.Windows;
 using UnityEngine;
 
 namespace Source
@@ -10,41 +12,68 @@ namespace Source
         private readonly Vector2 YRange = new(0, -3.1f);
         
         [SerializeField] private GameObject _resourceBuilding;
-        [SerializeField] private GameObject _processingBuilding;
+        [SerializeField] private GameObject _converterBuilding;
         [SerializeField] private GameObject _marketBuilding;
 
-        private readonly List<GameObject> _buildings = new();
+        private readonly List<UIBuilding> _uiBuildings = new();
 
-        private void Start()
+        private int _resourceBuildingAmount;
+        private Vector2 _buildingPosition;
+
+        private void Awake()
         {
-            _buildings.Add(_processingBuilding);
-            _buildings.Add(_marketBuilding);
+            _buildingPosition = new Vector2(XRange.x, YRange.x);
         }
 
-        public void AddResourceBuildingToPool(int resourceBuildingCount)
+        public void SetResourceBuildingAmount(int resourceBuildingAmount)
         {
-            for (int i = 0; i < resourceBuildingCount; i++)
-            {
-                _buildings.Add(_resourceBuilding);
-            }
+            _resourceBuildingAmount = resourceBuildingAmount;
         }
 
         public void DropBuildings()
         {
-            Vector2 buildingPosition = new(XRange.x, YRange.x);
-            
-            foreach (GameObject buildingPrefab in _buildings)
+            for (int i = 0; i < _resourceBuildingAmount; i++)
             {
-                if (buildingPosition.x >= XRange.y)
+                GameObject resourceBuildingObject = Instantiate(_resourceBuilding, GetBuildingPosition(), Quaternion.identity, transform);
+                resourceBuildingObject.GetComponent<ResourceBuilding>().Initialize(new ResourceForge());
+                UIResourceForgeBuilding uiForgeBuilding = resourceBuildingObject.GetComponent<UIResourceForgeBuilding>();
+                
+                uiForgeBuilding.showEvent += ShowBuildingWindow;
+                _uiBuildings.Add(uiForgeBuilding);
+            }
+            
+            GameObject _converterBuildingObject = Instantiate(_converterBuilding, GetBuildingPosition(), Quaternion.identity, transform);
+            _converterBuildingObject.GetComponent<ResourceBuilding>().Initialize(new ResourceConverter());
+            UIResourceConverterBuilding uiConverterBuilding = _converterBuildingObject.GetComponent<UIResourceConverterBuilding>();
+
+            uiConverterBuilding.showEvent += ShowBuildingWindow;
+            _uiBuildings.Add(uiConverterBuilding);
+        }
+
+        private Vector2 GetBuildingPosition()
+        {
+            if (_buildingPosition.x >= XRange.y)
+            {
+                _buildingPosition.x = XRange.x;
+                _buildingPosition += new Vector2(0, -3);
+            }
+
+            Vector2 value = _buildingPosition;
+            _buildingPosition += new Vector2(6, 0);
+
+            return value;
+        }
+        
+        private void ShowBuildingWindow(UIBuilding uiBuilding)
+        {
+            foreach (UIBuilding building in _uiBuildings)
+            {
+                if (building == uiBuilding)
                 {
-                    buildingPosition.x = XRange.x;
-                    buildingPosition += new Vector2(0, -3);
+                    continue;
                 }
                 
-                GameObject buildingObject = Instantiate(buildingPrefab, buildingPosition, Quaternion.identity, transform);
-                buildingObject.GetComponent<ResourceBuilding>().Initialize(new ResourceForge());
-
-                buildingPosition += new Vector2(6, 0);
+                building.Hide();
             }
         }
     }

@@ -12,4 +12,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b05f5a64d72f493391721a11886ec9e7, type: 3}
   m_Name: ResourceForgeBuildingData
   m_EditorClassIdentifier: 
-  resources: []
+  resources:
+  - name: wood
+    amountProduced: 1
+    productionTime: 0.5
+  - name: stone
+    amountProduced: 2
+    productionTime: 1.5
+  - name: iron
+    amountProduced: 1
+    productionTime: 2

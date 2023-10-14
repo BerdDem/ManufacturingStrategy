@@ -11,7 +11,21 @@ namespace Source.Data.ScriptableObjects
         public struct Resource
         {
             public string name;
+            public float amountProduced;
             public float productionTime;
+        }
+
+        public Resource GetResource(string resourceName)
+        {
+            foreach (Resource resource in resources)
+            {
+                if (resource.name == resourceName)
+                {
+                    return resource;
+                }
+            }
+            
+            throw new ArgumentException($"{resourceName} - not found");
         }
         
         public List<Resource> resources = new();

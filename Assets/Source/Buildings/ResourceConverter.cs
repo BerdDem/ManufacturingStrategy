@@ -1,51 +1,72 @@
 ﻿using System.Collections.Generic;
 using Source.Data;
+using Source.Data.ScriptableObjects;
 using UnityEngine;
 
 namespace Source.Buildings
 {
     public class ResourceConverter : IResourceForge
     {
-        private MakeResource _makeResource;
-        private float _timeToMakeResource;
-        private bool _processing;
+        private List<ResourceConverterBuildingData.Resource.RawMaterials> _materials;
 
-        public void ProcessingToggle()
+        private ResourceConverterBuildingData.Resource _resourceData;
+        private float _timeToMakeResource;
+        private bool _enable;
+
+        public void BuildEnable(bool enable)
         {
-            _processing = !_processing;
+            _enable = enable;
         }
 
-        public void SelectResource(string resourceName, MakeResource makeResource)
+        public void SelectResource(string resourceName)
         {
-            _makeResource = makeResource;
+            _resourceData = DataManager.instance.gameData.resourceConverterBuildingData.GetResource(resourceName);
+
+            _materials = _resourceData.materials;
+            _timeToMakeResource = 0;
         }
 
         public void ResourceCreationUpdate()
         {
-            if (!_processing)
+            if (!_enable)
             {
                 return;
             }
             
             ResourceContainer resourceContainer = DataManager.instance.playerResourceContainer;
             
-            // Add resource which need for make this resource, get that and price
-            // if (!resourceContainer.CheckPrice(_makeResource.rawResources))
-            // {
-            //     return;
-            // }
+            if (!CheckPrice())
+            {
+                return;
+            }
             
             _timeToMakeResource += Time.deltaTime;
 
-            if (_makeResource.secondsToMakeOne > _timeToMakeResource)
+            if (_resourceData.productionTime > _timeToMakeResource)
             {
                 return;
             }
 
-            // resourceContainer.DecreaseResources(_makeResource.rawResources);
-            resourceContainer.AddResources(new Dictionary<string, float> {{_makeResource.name, 1}});
+            foreach (ResourceConverterBuildingData.Resource.RawMaterials material in _resourceData.materials)
+            {
+                resourceContainer.DecreaseResources(material.name, material.amount);
+            }
+            resourceContainer.AddResources(new Dictionary<string, float> {{_resourceData.name, _resourceData.amountProduced}});
             
             _timeToMakeResource = 0;
+        }
+
+        public bool CheckPrice()
+        {
+            foreach (ResourceConverterBuildingData.Resource.RawMaterials material in _materials)
+            {
+                if (!DataManager.instance.playerResourceContainer.CheckPrice(material.name, material.amount))
+                {
+                    return false;
+                }
+            }
+
+            return true;
         }
     }
 }

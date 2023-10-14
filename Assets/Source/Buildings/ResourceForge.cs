@@ -1,40 +1,43 @@
 ﻿using System.Collections.Generic;
 using Source.Data;
+using Source.Data.ScriptableObjects;
 using UnityEngine;
 
 namespace Source.Buildings
 {
     public class ResourceForge : IResourceForge
     {
-        private MakeResource _makeResource;
+        private ResourceForgeBuildingData.Resource _resourceData;
+        
         private float _timeToMakeResource;
-        private bool _processing;
+        private bool _enable;
 
-        public void ProcessingToggle()
+        public void BuildEnable(bool enable)
         {
-            _processing = !_processing;
+            _enable = enable;
         }
 
-        public void SelectResource(string resourceName, MakeResource makeResource)
+        public void SelectResource(string resourceName)
         {
-            _makeResource = makeResource;
+            _resourceData = DataManager.instance.gameData.resourceForgeBuildingData.GetResource(resourceName);
+            _timeToMakeResource = 0;
         }
 
         public void ResourceCreationUpdate()
         {
-            if (!_processing)
+            if (!_enable)
             {
                 return;
             }
             
             _timeToMakeResource += Time.deltaTime;
 
-            if (_makeResource.secondsToMakeOne > _timeToMakeResource)
+            if (_resourceData.productionTime > _timeToMakeResource)
             {
                 return;
             }
             
-            DataManager.instance.playerResourceContainer.AddResources(new Dictionary<string, float> {{_makeResource.name, 1}});
+            DataManager.instance.playerResourceContainer.AddResources(new Dictionary<string, float> {{_resourceData.name, _resourceData.amountProduced}});
             _timeToMakeResource = 0;
         }
     }

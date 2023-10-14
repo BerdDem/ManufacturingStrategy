@@ -1,5 +1,4 @@
-﻿using System;
-using Source.Data;
+﻿using Source.Data;
 using Source.View.Properties;
 using UnityEngine;
 

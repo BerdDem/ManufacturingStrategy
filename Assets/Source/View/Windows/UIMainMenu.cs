@@ -22,7 +22,7 @@ namespace Source.View.Windows
 
         public void StartGame()
         {
-            _locationBuilder.AddResourceBuildingToPool(_indexSelectedButton.value);
+            _locationBuilder.SetResourceBuildingAmount(_indexSelectedButton.value);
             _locationBuilder.DropBuildings();
 
             gameObject.SetActive(false);

@@ -2,8 +2,8 @@
 {
     public interface IResourceForge
     {
-        public void ProcessingToggle();
-        public void SelectResource(string resourceName, MakeResource makeResource);
+        public void BuildEnable(bool enable);
+        public void SelectResource(string resourceName);
         public void ResourceCreationUpdate();
     }
 }

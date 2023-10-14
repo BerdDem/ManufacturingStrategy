@@ -13,8 +13,6 @@ MonoBehaviour:
   m_Name: ResourceData
   m_EditorClassIdentifier: 
   resources:
-  - name: gold
-    sprite: {fileID: 21300000, guid: 53831ffd2c1064d07b3fcc10982b1e0d, type: 3}
   - name: wood
     sprite: {fileID: 21300000, guid: e0eac6b76fdd842e88a7f8c75ecffaf4, type: 3}
   - name: stone
@@ -27,3 +25,5 @@ MonoBehaviour:
     sprite: {fileID: 21300000, guid: 6a20f4dbf06be284e860c0bf6799923a, type: 3}
   - name: staff
     sprite: {fileID: 21300000, guid: 3fa53af4c50543b469421a6895537de8, type: 3}
+  - name: gold
+    sprite: {fileID: 21300000, guid: 53831ffd2c1064d07b3fcc10982b1e0d, type: 3}

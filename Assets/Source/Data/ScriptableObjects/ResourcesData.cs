@@ -21,12 +21,10 @@ namespace Source.Data.ScriptableObjects
         {
             foreach (Resource resource in resources)
             {
-                if (resourceName != resource.name)
+                if (resourceName == resource.name)
                 {
-                    continue;
+                    return resource;
                 }
-
-                return resource;
             }
 
             throw new ArgumentException($"{resourceName} - not found");

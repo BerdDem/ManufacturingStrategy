@@ -6,7 +6,7 @@ namespace Source
     public class ResourceContainer
     {
         private Dictionary<string, float> _resources;
-        private readonly Dictionary<string, List<Action<float>>> _resourceChangeEvents = new();
+        private readonly Dictionary<string, Action<float>> _resourceChangeEvents = new();
 
         public void InitializeResources(Dictionary<string, float> resources)
         {
@@ -14,7 +14,7 @@ namespace Source
 
             foreach (KeyValuePair<string, float> resource in _resources)
             {
-                _resourceChangeEvents.Add(resource.Key, new List<Action<float>>());
+                _resourceChangeEvents.Add(resource.Key, null);
             }
         }
 
@@ -23,6 +23,8 @@ namespace Source
             foreach (KeyValuePair<string, float> resource in resources)
             {
                 _resources[resource.Key] += resource.Value;
+                
+                _resourceChangeEvents[resource.Key].Invoke(_resources[resource.Key]);
             }
         }
 
@@ -31,7 +33,14 @@ namespace Source
             foreach (KeyValuePair<string, float> resource in resources)
             {
                 _resources[resource.Key] -= resource.Value;
+                _resourceChangeEvents[resource.Key].Invoke(_resources[resource.Key]);
             }
+        }
+
+        public void DecreaseResources(string name, float amount)
+        {
+            _resources[name] -= amount;
+            _resourceChangeEvents[name].Invoke(_resources[name]);
         }
 
         public float GetResourceValue(string resourceName)
@@ -51,15 +60,20 @@ namespace Source
 
             return true;
         }
+        
+        public bool CheckPrice(string resourceName, float amount)
+        {
+            return _resources[resourceName] > amount;
+        }
 
         public void SubscribeResourceChange(string resourceName, Action<float> changeResourceNotification)
         {
-            _resourceChangeEvents[resourceName].Add(changeResourceNotification);
+            _resourceChangeEvents[resourceName] += changeResourceNotification;
         }
 
         public void UnsubscribeResourceChange(string resourceName, Action<float> changeResourceNotification)
         {
-            _resourceChangeEvents[resourceName].Remove(changeResourceNotification);
+            _resourceChangeEvents[resourceName] -= changeResourceNotification;
         }
     }
 }

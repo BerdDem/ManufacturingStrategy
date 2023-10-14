@@ -12,4 +12,32 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1dc6392f4f6c4936bd4789fab968f7b6, type: 3}
   m_Name: ResourceConverterBuildingData
   m_EditorClassIdentifier: 
-  resources: []
+  materialNames:
+  - wood
+  - stone
+  - iron
+  resources:
+  - materials:
+    - name: wood
+      amount: 3
+    - name: stone
+      amount: 3
+    name: hammer
+    amountProduced: 2
+    productionTime: 2
+  - materials:
+    - name: wood
+      amount: 2
+    - name: iron
+      amount: 1
+    name: axe
+    amountProduced: 1
+    productionTime: 1.5
+  - materials:
+    - name: stone
+      amount: 2
+    - name: iron
+      amount: 2
+    name: staff
+    amountProduced: 1
+    productionTime: 4
