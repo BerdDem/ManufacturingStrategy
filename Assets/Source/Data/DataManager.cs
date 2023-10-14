@@ -1,12 +1,12 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
+using Source.Data.ScriptableObjects;
+using UnityEngine;
 
-namespace Source
+namespace Source.Data
 {
-    public class GameManager : MonoBehaviour
+    public class DataManager : MonoBehaviour
     {
-        private static GameManager _instance;
-
-        public static GameManager instance
+        public static DataManager instance
         {
             get
             {
@@ -16,13 +16,18 @@ namespace Source
                 }
                 
                 GameObject singletonObject = Instantiate(new GameObject());
-                _instance = singletonObject.AddComponent<GameManager>();
+                _instance = singletonObject.AddComponent<DataManager>();
                 
                 return _instance;
             }
         }
         
         public ResourceContainer playerResourceContainer { get; private set; }
+        public GameData gameData => _gameData;
+
+        [SerializeField] private GameData _gameData;
+        
+        private static DataManager _instance;   
         
         private void Awake()
         {
@@ -37,6 +42,16 @@ namespace Source
             }
 
             playerResourceContainer = new ResourceContainer();
+
+
+            
+            //loadFromSave
+            Dictionary<string, float> resource = new();
+            foreach (ResourcesData.Resource resourceData in gameData.resourcesData.resources)
+            {
+                resource.Add(resourceData.name, 0);
+            }
+            playerResourceContainer.InitializeResources(resource);
         }
     }
 }

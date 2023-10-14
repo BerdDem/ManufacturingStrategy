@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Source.Buildings;
 using UnityEngine;
 
 namespace Source
@@ -32,7 +33,7 @@ namespace Source
         {
             Vector2 buildingPosition = new(XRange.x, YRange.x);
             
-            foreach (GameObject building in _buildings)
+            foreach (GameObject buildingPrefab in _buildings)
             {
                 if (buildingPosition.x >= XRange.y)
                 {
@@ -40,7 +41,8 @@ namespace Source
                     buildingPosition += new Vector2(0, -3);
                 }
                 
-                Instantiate(building, buildingPosition, Quaternion.identity, transform);
+                GameObject buildingObject = Instantiate(buildingPrefab, buildingPosition, Quaternion.identity, transform);
+                buildingObject.GetComponent<ResourceBuilding>().Initialize(new ResourceForge());
 
                 buildingPosition += new Vector2(6, 0);
             }

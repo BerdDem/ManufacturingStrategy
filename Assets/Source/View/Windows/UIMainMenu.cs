@@ -6,6 +6,7 @@ namespace Source.View.Windows
     public class UIMainMenu : MonoBehaviour
     {
         [SerializeField] private LocationBuilder _locationBuilder;
+        [SerializeField] private GameObject _locationCanvasObject;
         
         private readonly IntProperty _indexSelectedButton = new();
 
@@ -25,6 +26,7 @@ namespace Source.View.Windows
             _locationBuilder.DropBuildings();
 
             gameObject.SetActive(false);
+            _locationCanvasObject.gameObject.SetActive(true);
         }
     }
 }

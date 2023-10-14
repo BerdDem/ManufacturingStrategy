@@ -5,8 +5,8 @@ namespace Source
 {
     public class ResourceContainer
     {
-        private Dictionary<string, float> _resources = new();
-        private Dictionary<string, List<Action<float>>> _resourceChangeEvents;
+        private Dictionary<string, float> _resources;
+        private readonly Dictionary<string, List<Action<float>>> _resourceChangeEvents = new();
 
         public void InitializeResources(Dictionary<string, float> resources)
         {

@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Source.Data;
 using UnityEngine;
 
 namespace Source.Buildings
@@ -7,7 +8,13 @@ namespace Source.Buildings
     {
         private MakeResource _makeResource;
         private float _timeToMakeResource;
-        
+        private bool _processing;
+
+        public void ProcessingToggle()
+        {
+            _processing = !_processing;
+        }
+
         public void SelectResource(string resourceName, MakeResource makeResource)
         {
             _makeResource = makeResource;
@@ -15,7 +22,12 @@ namespace Source.Buildings
 
         public void ResourceCreationUpdate()
         {
-            ResourceContainer resourceContainer = GameManager.instance.playerResourceContainer;
+            if (!_processing)
+            {
+                return;
+            }
+            
+            ResourceContainer resourceContainer = DataManager.instance.playerResourceContainer;
             
             // Add resource which need for make this resource, get that and price
             // if (!resourceContainer.CheckPrice(_makeResource.rawResources))

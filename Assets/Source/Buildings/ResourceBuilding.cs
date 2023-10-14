@@ -29,6 +29,11 @@ namespace Source.Buildings
         {
             _resourceForge.SelectResource(resourceName, _makeResource);
         }
+
+        public void ProcessingToggle()
+        {
+            _resourceForge.ProcessingToggle();
+        }
         
         private void Update()
         {
