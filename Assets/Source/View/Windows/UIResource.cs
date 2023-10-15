@@ -14,6 +14,7 @@ namespace Source.View.Windows
             DataManager dataManager = DataManager.instance;
             dataManager.playerResourceContainer.SubscribeResourceChange(resourceName, ChangeResourceValueNotification);
             _spriteProperty.value = dataManager.gameData.resourcesData.GetResource(resourceName).sprite;
+            _resourceValue.value = (int)dataManager.playerResourceContainer.GetResourceValue(resourceName);
         }
 
         private void ChangeResourceValueNotification(float resourceValue)

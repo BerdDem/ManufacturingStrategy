@@ -48,6 +48,12 @@ namespace Source
 
             uiConverterBuilding.showEvent += ShowBuildingWindow;
             _uiBuildings.Add(uiConverterBuilding);
+            
+            GameObject _marketBuildingObject = Instantiate(_marketBuilding, GetBuildingPosition(), Quaternion.identity, transform);
+            UIMarketBuilding uiMarketBuilding = _marketBuildingObject.GetComponent<UIMarketBuilding>();
+
+            uiMarketBuilding.showEvent += ShowBuildingWindow;
+            _uiBuildings.Add(uiMarketBuilding);
         }
 
         private Vector2 GetBuildingPosition()

@@ -5,6 +5,8 @@ namespace Source
 {
     public class ResourceContainer
     {
+        public Dictionary<string, float> resources => _resources;
+
         private Dictionary<string, float> _resources;
         private readonly Dictionary<string, Action<float>> _resourceChangeEvents = new();
 
@@ -26,6 +28,12 @@ namespace Source
                 
                 _resourceChangeEvents[resource.Key].Invoke(_resources[resource.Key]);
             }
+        }
+        
+        public void AddResources(string name, float amount)
+        {
+            _resources[name] += amount;
+            _resourceChangeEvents[name].Invoke(_resources[name]);
         }
 
         public void DecreaseResources(Dictionary<string, float> resources)

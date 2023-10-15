@@ -7,7 +7,7 @@ using UnityEngine.UI;
 
 namespace Source.View.Windows
 {
-    public class UIResourceChanger : MonoBehaviour
+    public class UIResourceSelector : MonoBehaviour
     {
         public Action<string> resourceChangeEvent;
         

@@ -4,6 +4,7 @@ using Source.Data;
 using Source.Data.ScriptableObjects;
 using Source.View.Properties;
 using UnityEngine;
+using UnityEngine.Serialization;
 using UnityEngine.UI;
 
 namespace Source.View.Windows
@@ -11,12 +12,12 @@ namespace Source.View.Windows
     public class UIResourceForgeBuilding : UIBuilding
     {
         [SerializeField] private ResourceBuilding _resourceBuilding;
-        [SerializeField] private UIResourceChanger _resourceChanger;
+        [FormerlySerializedAs("_resourceChanger")] [SerializeField] private UIResourceSelector resourceSelector;
         [SerializeField] private Button _enableToggleButton;
         
         private readonly BoolProperty _buildingEnable = new();
         
-        private void Awake()
+        private void Start()
         {
             List<string> resources = new();
             foreach (ResourceForgeBuildingData.Resource resource in DataManager.instance.gameData.resourceForgeBuildingData.resources)
@@ -24,8 +25,8 @@ namespace Source.View.Windows
                 resources.Add(resource.name);
             }
             
-            _resourceChanger.resourceChangeEvent += ChangeResource;
-            _resourceChanger.SetResources(resources);
+            resourceSelector.resourceChangeEvent += ChangeResource;
+            resourceSelector.SetResources(resources);
             
             _enableToggleButton.onClick.AddListener(BuildEnableToggle);
         }
@@ -37,7 +38,7 @@ namespace Source.View.Windows
             _resourceBuilding.BuildEnable(_buildingEnable.value);
         }
 
-        public void BuildEnableToggle()
+        private void BuildEnableToggle()
         {
             _buildingEnable.value = !_buildingEnable.value;
             

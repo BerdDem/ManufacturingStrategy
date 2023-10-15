@@ -4,6 +4,7 @@ using Source.Data;
 using Source.Data.ScriptableObjects;
 using Source.View.Properties;
 using UnityEngine;
+using UnityEngine.Serialization;
 using UnityEngine.UI;
 
 namespace Source.View.Windows
@@ -11,7 +12,7 @@ namespace Source.View.Windows
     public class UIResourceConverterBuilding : UIBuilding
     {
         [SerializeField] private ResourceBuilding _resourceBuilding;
-        [SerializeField] private UIResourceChanger _resourceChanger;
+        [FormerlySerializedAs("_resourceChanger")] [SerializeField] private UIResourceSelector resourceSelector;
         [SerializeField] private Button _enableToggleButton;
         
         private readonly BoolProperty _buildingEnable = new();
@@ -23,7 +24,7 @@ namespace Source.View.Windows
         
         private void Start()
         {
-            _resourceChanger.resourceChangeEvent += ResourceChange;
+            resourceSelector.resourceChangeEvent += ResourceChange;
             _enableToggleButton.onClick.AddListener(BuildEnableToggle);
 
             List<string> resources = new();
@@ -31,7 +32,7 @@ namespace Source.View.Windows
             {
                 resources.Add(resource.name);
             }
-            _resourceChanger.SetResources(resources);
+            resourceSelector.SetResources(resources);
         }
 
         private void ResourceChange(string resourceName)

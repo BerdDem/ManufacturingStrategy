@@ -1,4 +1,5 @@
-﻿using Source.View.Properties;
+﻿using Source.Data;
+using Source.View.Properties;
 using UnityEngine;
 
 namespace Source.View.Windows
@@ -13,6 +14,10 @@ namespace Source.View.Windows
         private void Start()
         {
             SetSelectedButton(1);
+            if (!DataManager.instance.firstStart)
+            {
+                StartGame();
+            }
         }
 
         public void SetSelectedButton(int buttonIndex)
